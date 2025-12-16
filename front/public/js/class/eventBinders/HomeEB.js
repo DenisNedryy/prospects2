@@ -10,7 +10,7 @@ export class HomeEB {
         this.dep = null;
         this.svg = null;
         this.label = null;
-        this.typeApi = "siren";
+
 
     }
 
@@ -104,16 +104,9 @@ export class HomeEB {
             if (!container) return;
             const select = container.querySelector('#filterType');
             if (!select) return;
-
-            switch (this.typeApi) {
-                case 'siren':
-                    await this.operationSiren(this.dep);
-                    this.stopWhitePolygon(this.dep)
-                    break;
-
-                default:
-                    console.error('SELECT type unknow');
-            }
+            this.controller.sounds.play('dubStep');
+            await this.operationSiren(this.dep);
+            this.stopWhitePolygon(this.dep)
         }
     }
 
@@ -148,31 +141,7 @@ export class HomeEB {
     }
 
     async handleChange(e) {
-        const typeSelect = document.getElementById('filterType');
-        if (typeSelect) {
-            this.typeApi = typeSelect.value;
-            console.log(typeSelect.value);
-            switch (typeSelect.value) {
-                case 'siren':
-                    await this.loadSirenMap();
-                    break;
 
-                case 'dirigeants':
-                    // afficher la map pour le dirigeants
-                    break;
-
-                case 'emails':
-                    // afficher la map pour le emails
-                    break;
-
-                case 'tous':
-                    // afficher la map pour le tous
-                    break;
-
-
-                default: return;
-            }
-        }
     }
 
 
@@ -182,9 +151,9 @@ export class HomeEB {
         console.log("siren select change");
         const res = await this.controller.entreprise.getSirenDepLength();
         console.log(res);
-        const entreprises = res.data; 
+        const entreprises = res.data;
         // on recolorise la carte selon la length
-        this.operationRecolorisation(entreprises); 
+        this.operationRecolorisation(entreprises);
     }
 
     getCentroid(pointsStr) {
@@ -278,6 +247,7 @@ export class HomeEB {
     }
 
     operationRecolorisation(data) {
+        if (!data) return;
         const polygons = document.querySelectorAll('polygon');
         polygons.forEach((polygon) => {
             const dep = polygon.getAttribute('data-dep');

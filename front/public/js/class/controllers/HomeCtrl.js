@@ -1,10 +1,11 @@
 export class HomeCtrl {
 
-    constructor(seoManager, { views, eventBinders, services }) {
+    constructor(seoManager, { views, eventBinders, services, models }) {
         this.seoManager = seoManager;
         this.homeView = views.homeView;
         this.homeEB = eventBinders.homeEB;
         this.entreprise = services.entreprise;
+        this.sounds = models.sounds;
 
         this.homeEB.setController(this);
     }
