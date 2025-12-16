@@ -1,10 +1,9 @@
 export class Sounds {
   constructor() {
     this.sounds = {
-      dubStep: new Audio("/assets/sounds/dubStep.mp3")
+      dubStep: new Audio("/public/assets/sounds/dubStep.mp3")
     };
 
-    // optionnel : réglages globaux
     this.sounds.dubStep.volume = 0.5;
   }
 
@@ -15,9 +14,18 @@ export class Sounds {
       return;
     }
 
-    sound.currentTime = 0; // rejoue depuis le début
-    sound.play().catch(err => {
-      console.error("Audio play error:", err);
-    });
+    sound.currentTime = 0;
+    sound.play().catch(console.error);
+  }
+
+  stop(name) {
+    const sound = this.sounds[name];
+    if (!sound) {
+      console.warn(`Sound "${name}" not found`);
+      return;
+    }
+
+    sound.pause();
+    sound.currentTime = 0;
   }
 }

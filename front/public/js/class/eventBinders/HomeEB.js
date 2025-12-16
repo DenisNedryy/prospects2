@@ -106,6 +106,7 @@ export class HomeEB {
             if (!select) return;
             this.controller.sounds.play('dubStep');
             await this.operationSiren(this.dep);
+            this.controller.sounds.stop('dubStep');
             this.stopWhitePolygon(this.dep)
         }
     }
