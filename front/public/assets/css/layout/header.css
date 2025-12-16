@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+  --primary: #6c63ff;
+  --secondary: #00e5ff;
+  --dark: #0f1020;
+  --light: #ffffff;
+  --glass: rgba(255, 255, 255, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top, #1a1b3a, #0a0b1c);
+  color: var(--light);
+  min-height: 100vh;
+}
+
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 1rem 3rem;
+  background: linear-gradient(
+    135deg,
+    rgba(108, 99, 255, 0.25),
+    rgba(0, 229, 255, 0.15)
+  );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.btn-nav {
+  position: relative;
+  text-decoration: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  overflow: hidden;
+  font-weight: 600;
+  color: var(--light);
+  transition: all 0.4s ease;
+}
+
+.btn-nav span {
+  position: relative;
+  z-index: 2;
+}
+
+
+.btn-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    var(--primary),
+    var(--secondary)
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 6px;
+}
+
+.btn-nav::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.35),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+
+.btn-nav:hover {
+  transform: translateY(-2px);
+}
+
+.btn-nav:hover::before,
+.btn-nav:hover::after {
+  opacity: 1;
+}
+
+
+.btn-nav.active {
+  background: linear-gradient(
+    120deg,
+    var(--primary),
+    var(--secondary)
+  );
+}
+
+
+@media (max-width: 768px) {
+  header {
+    padding: 1rem;
+  }
+
+  nav ul {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+}

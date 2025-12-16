@@ -1,0 +1,17 @@
+.rotating {
+    animation: rotation 2s linear infinite;
+}
+
+.btn {
+  border: none;
+  padding: 11px 24px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+select {
+    background-color: #fff;
+    padding: 5px;
+    width: 178px;
+}

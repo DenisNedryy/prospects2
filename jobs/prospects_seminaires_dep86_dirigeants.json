@@ -1,0 +1,71 @@
+{
+  "departement": "86",
+  "total": 53,
+  "prospects": [
+    {
+      "siret": "90500229100011",
+      "siren": "905002291",
+      "nom": "3DL",
+      "activite": "73.20Z",
+      "enseigne": null,
+      "adresse": "24 BOULEVARD DU GRAND CERF",
+      "codePostal": "86000",
+      "ville": "POITIERS",
+      "trancheEffectifs": "11",
+      "etatEtablissement": "A",
+      "dirigeants": []
+    },
+    {
+      "siret": "31160444100023",
+      "siren": "311604441",
+      "nom": "PRESSE PROMOTION",
+      "activite": "73.11Z",
+      "enseigne": null,
+      "adresse": "23 RUE DES LAVOIRS",
+      "codePostal": "86100",
+      "ville": "SENILLE-SAINT-SAUVEUR",
+      "trancheEffectifs": "12",
+      "etatEtablissement": "A",
+      "dirigeants": []
+    },
+    {
+      "siret": "44860581600041",
+      "siren": "448605816",
+      "nom": "GENIUS& CO",
+      "activite": "73.11Z",
+      "enseigne": null,
+      "adresse": "AVENUE THOMAS EDISON",
+      "codePostal": "86360",
+      "ville": "CHASSENEUIL-DU-POITOU",
+      "trancheEffectifs": "11",
+      "etatEtablissement": "A",
+      "dirigeants": []
+    },
+    {
+      "siret": "38858345200049",
+      "siren": "388583452",
+      "nom": "TEXTILE ARTS GRAPHIQUES",
+      "activite": "73.11Z",
+      "enseigne": null,
+      "adresse": "1 RUE VICTOR GRIGNARD",
+      "codePostal": "86000",
+      "ville": "POITIERS",
+      "trancheEffectifs": "11",
+      "etatEtablissement": "A",
+      "dirigeants": []
+    },
+    {
+      "siret": "79824783900029",
+      "siren": "798247839",
+      "nom": "MILOCTAV",
+      "activite": "73.11Z",
+      "enseigne": null,
+      "adresse": "28 AVENUE DES TEMPS MODERNES",
+      "codePostal": "86360",
+      "ville": "CHASSENEUIL-DU-POITOU",
+      "trancheEffectifs": "11",
+      "etatEtablissement": "A",
+      "dirigeants": []
+    }
+  ]
+}

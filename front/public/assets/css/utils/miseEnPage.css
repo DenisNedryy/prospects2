@@ -1,0 +1,45 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction:column;
+    font-family: roboto-regular;
+}
+
+main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #EBF5FF;
+}
+
+header {
+    height: 79px;
+}
+
+#root {
+    flex-grow: 1;
+    color: black;
+    overflow: auto;
+    width:100%;
+    height: 100%;
+}
+
+.home,
+.agenda,
+.crn,
+.converts,
+.auth {
+    margin: 20px 40px;
+}
+
+.content {
+    display: flex;
+    height: 100%;
+    width:100%;
+}

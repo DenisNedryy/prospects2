@@ -1,0 +1,13 @@
+/* utils */
+@import "./utils/miseEnPage.css";
+@import "./utils/utils.css";
+@import "./utils/animations.css";
+
+/* layout */
+@import "./layout/header.css";
+@import "./layout/footer.css";
+@import "./layout/asside.css";
+
+/* pages */
+@import "./pages/home.css";
+@import "./pages/data.css";

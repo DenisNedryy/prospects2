@@ -1,0 +1,439 @@
+/* ===============================
+   THEME (style OVH-like)
+================================ */
+:root{
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --border: #e6edf7;
+  --text: #0b1f3b;
+  --muted: #6b7a90;
+
+  --blue-900: #001a70;
+  --blue-700: #0050d7;
+  --blue-600: #1a73ff;
+
+  --shadow: 0 10px 25px rgba(12, 36, 97, .08);
+  --shadow-sm: 0 6px 16px rgba(12, 36, 97, .06);
+
+  --radius: 14px;
+  --radius-sm: 10px;
+}
+
+/* Page */
+.home{
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  padding: 24px;
+  gap: 20px;
+}
+
+/* ===============================
+   HEADER (2 cartes)
+================================ */
+.home__header{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.homeHeaderBox{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 18px 18px 16px;
+  width: 100%;
+  max-width: none;
+}
+
+.homeHeaderBox h2{
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--blue-900);
+  letter-spacing: .2px;
+}
+
+.homeHeaderBox ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.homeHeaderBox li{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fbfdff;
+  color: var(--text);
+  font-size: 13.5px;
+  line-height: 1.2;
+}
+
+/* petit “bullet” style OVH */
+.homeHeaderBox li::before{
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: #2ecc71; /* dispo-like */
+  box-shadow: 0 0 0 3px rgba(46,204,113,.14);
+  flex: 0 0 8px;
+}
+
+.home__header__effectifs{
+  margin-left: 0; /* on laisse le grid gérer l’espace */
+}
+
+/* ===============================
+   MAIN (carte + panneau)
+================================ */
+.home__main{
+  display: grid;
+  grid-template-columns: 1.25fr .95fr;
+  gap: 18px;
+  align-items: start;
+}
+
+/* Carte (carte blanche + padding) */
+.home__main__map{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  overflow: hidden;
+}
+
+/* Ajuste ton wrapper svg */
+.carte-france{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0;
+}
+
+/* ===============================
+   SVG départements (look plus clean)
+================================ */
+.carte-france .overlay{
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.carte-france .overlay polygon{
+  stroke: rgba(255,255,255,.95);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  cursor: pointer;
+
+  fill: #0c8282;
+  transition: transform .08s ease, filter .12s ease, fill .15s ease;
+}
+
+.carte-france .overlay polygon:hover{
+  fill: url(#bleuBlancRouge) !important;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.12));
+  transform: translateY(-1px);
+}
+
+.polygon-white{ fill: #aee2c1 !important; }
+.selected{ fill: #e24e4e !important; }
+
+/* ===============================
+   DETAILS (carte + header bleu)
+================================ */
+.home__main__details{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0;               /* header collé en haut */
+  width: 100%;
+  max-width: none;
+  height: 420px;            /* un peu plus “dashboard” */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Bandeau bleu comme sur l’image */
+.home__main__details__header{
+  background: var(--blue-900);
+  padding: 14px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Select style “pro” */
+.home__main__details__header select{
+  width: 100%;
+  max-width: 240px;
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  outline: none;
+}
+
+.home__main__details__header select option{
+  color: var(--text);
+}
+
+/* Corps */
+.home__main__details__body{
+  padding: 14px;
+  overflow: auto;
+  height: 100%;
+  background: #ffffff;
+}
+
+/* Exemple de “lignes” à l’intérieur si tu injectes des div/li */
+.home__main__details__body > *{
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 3px 10px rgba(12,36,97,.04);
+}
+
+/* ===============================
+   FOOTER (si tu l’utilises)
+================================ */
+.home__footer{
+  margin-top: 6px;
+}
+
+.home__fotter__recap{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 14px;
+  color: var(--muted);
+}
+
+/* ===============================
+   Boutons (si tu utilises .box comme bouton)
+================================ */
+.box{
+  width: auto;
+  height: auto;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0);
+  background: var(--blue-700);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 10px 18px rgba(0,80,215,.18);
+  transition: transform .08s ease, box-shadow .12s ease, background .12s ease;
+}
+
+.box:hover{
+  background: var(--blue-600);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 22px rgba(0,80,215,.22);
+}
+
+.btn-crn{
+  background: #fbdf67;
+  color: #1b1b1b;
+  box-shadow: 0 10px 18px rgba(251,223,103,.25);
+  margin: 15px 0px;
+}
+
+.btn-enrichissement{
+  background: #e4576b;
+  border: none;
+  color: #fff;
+  box-shadow: 0 10px 18px rgba(228,87,107,.22);
+}
+
+/* ===============================
+   Responsive
+================================ */
+@media (max-width: 1100px){
+  .home__main{
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px){
+  .home__header{
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ====== LAYOUT PROPRE / ORDONNÉ ====== */
+
+.home{
+  background: var(--bg);
+  min-height: 100vh;
+
+  /* centre + largeur max (effet dashboard) */
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 2 cartes du haut alignées */
+.home__header{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: stretch; /* IMPORTANT : mêmes hauteurs */
+}
+
+/* cartes : même logique partout */
+.homeHeaderBox{
+  height: 100%;
+  padding: 16px;
+}
+
+/* MAIN : 2 colonnes bien fixées */
+.home__main{
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+/* Colonne carte */
+.home__main__map{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  min-height: 520px; /* donne une hauteur stable */
+}
+
+/* Empêche le SVG de déborder et le centre */
+.carte-france{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.carte-france .overlay{
+  width: min(560px, 100%);
+  height: auto;
+  display: block;
+}
+
+/* Colonne détails : hauteur stable + scroll interne */
+.home__main__details{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 520px;   /* même hauteur que la map */
+  overflow: hidden;
+  margin-left: 0;      /* on enlève l’ancien margin-left */
+}
+
+/* header bleu : hauteur fixe pour faire “clean” */
+.home__main__details__header{
+  background: var(--blue-900);
+  padding: 12px 14px;
+  min-height: 56px;
+
+  display: flex;
+  align-items: center;
+}
+
+/* select plus compact */
+.home__main__details__header select{
+  max-width: 220px;
+}
+
+/* body scrollable */
+.home__main__details__body{
+  padding: 14px;
+  overflow: auto;
+  flex: 1; /* prend toute la hauteur restante */
+}
+
+/* Mobile */
+@media (max-width: 1000px){
+  .home__header{ grid-template-columns: 1fr; }
+  .home__main{ grid-template-columns: 1fr; }
+  .home__main__map,
+  .home__main__details{ min-height: 420px; }
+}
+
+.home__main__details__body a{
+    border: none;
+}
+
+
+.details__phraseRassurante .fa-gear {
+    color: #000;
+    background-color: yellow;
+    padding: 3px;
+    border-radius: 50%;
+    border: 1px solid #cccbcb;
+    margin-right: 15px;
+}
+
+.details__phraseRassurante .fa-circle-check {
+    color: green;
+    margin-right: 15px;
+}
+
+.details__phraseRassurante {
+    display:flex;
+    align-items: center;
+}
+
+.btn-data {
+    background-color: #fbdf67;
+    margin: 15px 0px;
+}
+
+.btn-enrichissement {
+    background-color: rgb(228, 87, 107);
+    border: none;
+    color: white;
+}
+
+.map_legend {
+    font-size: 15px;
+    font-weight: bold;
+    fill: white;
+    /* couleur du texte */
+    stroke: black;
+    /* contour pour lisibilité */
+    stroke-width: 2px;
+    paint-order: stroke;
+    /* d'abord le contour, ensuite le texte */
+    pointer-events: none;
+    /* pour éviter que la souris capte le texte */
+}

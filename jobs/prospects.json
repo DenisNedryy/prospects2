@@ -1,0 +1,60 @@
+{
+  "departement": "86",
+  "total": 78,
+  "prospects": [
+    {
+      "siret": "37893235400517",
+      "siren": "378932354",
+      "nom": "GL EVENTS LIVE",
+      "activite": "82.30Z",
+      "enseigne": null,
+      "adresse": "1 RUE FRANCOIS ROZIER",
+      "codePostal": "86130",
+      "ville": "JAUNAY-MARIGNY",
+      "trancheEffectifs": "32",
+      "etatEtablissement": "A",
+      "dirigeants": [	"Bechet Sylvain" , "Rosenwald Maxime" , "Thevenet Benjamin" , "Ferraton Olivier" ]
+    },
+    {
+      "siret": "90500229100011",
+      "siren": "905002291",
+      "nom": "3DL",
+      "activite": "73.20Z",
+      "enseigne": null,
+      "adresse": "24 BOULEVARD DU GRAND CERF",
+      "codePostal": "86000",
+      "ville": "POITIERS",
+      "trancheEffectifs": "11",
+      "etatEtablissement": "A",
+      "dirigenants":["Chasles Sebastien"]
+    },
+    {
+      "siret": "32187778900271",
+      "siren": "321877789",
+      "nom": "INSTITUT NATIONAL DE L'HYGIENE ET DU NETTOYAGE INDUSTRIEL",
+      "activite": "85.59A",
+      "enseigne": null,
+      "adresse": "17 RUE ALBIN HALLER",
+      "codePostal": "86000",
+      "ville": "POITIERS",
+      "trancheEffectifs": "31",
+      "etatEtablissement": "A",
+      "dirigenants":[]
+    },
+    {
+      "siret": "33441214500180",
+      "siren": "334412145",
+      "nom": "IRSS",
+      "activite": "85.59A",
+      "enseigne": null,
+      "adresse": "190 RUE DE LA GIBAUDERIE",
+      "codePostal": "86000",
+      "ville": "POITIERS",
+      "trancheEffectifs": "31",
+      "etatEtablissement": "A",
+      "dirigenants":["Mongodin Philippe"]
+    }
+
+    
+  ]
+}
