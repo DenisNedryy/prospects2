@@ -10,8 +10,6 @@ export class HomeEB {
         this.dep = null;
         this.svg = null;
         this.label = null;
-
-
     }
 
     setController(controller) {
@@ -91,8 +89,10 @@ export class HomeEB {
             this.dep = dep;
             const el = document.querySelector(".home__main__details__body");
             if (!el) return;
-            this.generateDetailsDepartments(el, dep);
-            this.borderlineTheDepartment(target);
+            const departments = await this.loadDepartments();
+            // generateDetailsDepartments(el, dep, departments, emailsSent)
+            this.controller.homeView.generateDetailsDepartments(el, dep, departments);
+            this.controller.homeView.borderlineTheDepartment(target);
         }
 
         // Click sur le bouton d'enrichissement
@@ -103,9 +103,10 @@ export class HomeEB {
 
             if (!container) return;
             this.controller.sounds.play('dubStep');
-            await this.operationSiren(this.dep);
+            // await this.operationSiren(this.dep);
+            await this.operationProspection(this.dep);
             this.controller.sounds.stop('dubStep');
-            this.stopWhitePolygon(this.dep)
+            this.controller.homeView.stopWhitePolygon(this.dep)
         }
     }
 
@@ -121,7 +122,7 @@ export class HomeEB {
 
         const dep = target.getAttribute('data-dep') || '';
         const points = target.getAttribute('points') || '';
-        const { x, y } = this.getCentroid(points);
+        const { x, y } = this.controller.maps.getCentroid(points);
 
         this.label.setAttribute('x', String(x));
         this.label.setAttribute('y', String(y - 25));
@@ -143,88 +144,37 @@ export class HomeEB {
 
     }
 
+    async operationProspection(dep) {
+        console.log("operation prospection en lancé");
 
-    async loadSirenMap() {
-        // afficher la map pour le siren
-        // fetch des values pour table entreprises
-        console.log("siren select change");
-        const res = await this.controller.entreprise.getSirenDepLength();
-        console.log(res);
-        const entreprises = res.data;
-        // on recolorise la carte selon la length
-        this.operationRecolorisation(entreprises);
+        // récupération des siren
+        await new Promise((resolve) => {
+            this.controller.homeView.renderOperationEnCours("sirene");
+            setTimeout(() => {
+                console.log("siren trouvé");
+                resolve();
+            }, 3000);
+        });
+
+        // enrichissement via pappers
+        await new Promise((resolve) => {
+            this.controller.homeView.renderOperationEnCours("pappers");
+            setTimeout(() => {
+                console.log("dirigeants trouvé");
+                resolve();
+            }, 3000);
+        });
+
+        // enrichissement via dropContact
+        await new Promise((resolve) => {
+            this.controller.homeView.renderOperationEnCours("dropContact");
+            setTimeout(() => {
+                console.log("email trouvé");
+                resolve();
+            }, 3000);
+        });
     }
 
-    getCentroid(pointsStr) {
-        const nums = pointsStr
-            .trim()
-            .split(/[ ,]+/)
-            .map(n => parseFloat(n));
-
-        let xSum = 0;
-        let ySum = 0;
-        let count = 0;
-
-        for (let i = 0; i < nums.length; i += 2) {
-            xSum += nums[i];
-            ySum += nums[i + 1];
-            count++;
-        }
-
-        return {
-            x: xSum / count,
-            y: ySum / count
-        };
-    }
-
-    async generateDetailsDepartments(el, dep) {
-        // S'assurer que les départements sont chargés
-        const departments = await this.loadDepartments();
-
-        const sirenRes = await this.controller.entreprise.getSirenPerDep(dep);
-        const sirenCount = sirenRes.count;
-
-        el.innerHTML = "";
-
-        // titre
-        const title = document.createElement('h2');
-        title.textContent = `Détails départements: ${departments[dep]}-${dep}`;
-        el.appendChild(title);
-
-        // legend
-        const legend = document.createElement('p');
-        legend.textContent = `Total siren trouvé: ${sirenCount}`;
-        el.appendChild(legend);
-
-        // link to crm
-        if (sirenCount > 0) {
-            const crma = document.createElement('a');
-            crma.setAttribute('data-link', ``);
-            crma.setAttribute('href', `/data?dep=${dep}`)
-            const crmBtn = document.createElement('button');
-            crmBtn.className = "btn btn-data";
-            crmBtn.textContent = "Data";
-            crma.appendChild(crmBtn);
-            el.appendChild(crma);
-        }
-
-
-        // sous titre
-        const subTitle = document.createElement('h3');
-        subTitle.textContent = "Récupération des données";
-        el.appendChild(subTitle);
-
-        // btn submit
-        const btn = document.createElement('button');
-        btn.textContent = "Lancer l'enrichissement du département";
-        btn.className = "btn-enrichissement btn";
-        el.appendChild(btn);
-
-        // ligne d'information
-        const infoDiv = document.createElement('div');
-        infoDiv.className = "details__phraseRassurante";
-        el.appendChild(infoDiv);
-    }
 
     async operationSiren(dep) {
         const el = document.querySelector(".details__phraseRassurante");
@@ -240,31 +190,17 @@ export class HomeEB {
         await this.loadSirenMap();
     }
 
-    borderlineTheDepartment(target) {
-        document.querySelectorAll('.selected').forEach((el) => el.classList.remove('selected'));
-        target.classList.add('selected');
-    }
 
-    operationRecolorisation(data) {
-        if (!data) return;
-        const polygons = document.querySelectorAll('polygon');
-        polygons.forEach((polygon) => {
-            const dep = polygon.getAttribute('data-dep');
-            const sameData = data.find((cell) => Number(cell.dep) === Number(dep));
-            if (sameData.length === 0) {
-                polygon.classList.add('polygon-white');
-            }
-        })
-    }
 
-    stopWhitePolygon(dep) {
-        const polygons = document.querySelectorAll('polygon');
-        polygons.forEach((polygon) => {
-            const depPoly = polygon.getAttribute('data-dep');
+    // async loadSirenMap() {
+    //     // afficher la map pour le siren
+    //     // fetch des values pour table entreprises
+    //     console.log("siren select change");
+    //     const res = await this.controller.entreprise.getSirenDepLength();
+    //     console.log(res);
+    //     const entreprises = res.data;
+    //     // on recolorise la carte selon la length
+    //     this.operationRecolorisation(entreprises);
+    // }
 
-            if (Number(depPoly) === Number(dep)) {
-                polygon.classList.remove('polygon-white');
-            }
-        })
-    }
 }

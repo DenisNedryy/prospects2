@@ -2,7 +2,8 @@ import { HomeCtrl } from "../class/controllers/HomeCtrl.js";
 import { HomeEB } from "../class/eventBinders/HomeEB.js";
 import { HomeView } from "../class/views/HomeView.js";
 import { Entreprises } from "../class/services/Entreprises.js";
-import { Sounds } from "../class/models/Sounds.js";
+import { Maps } from "../class/models/Maps.js";
+import { Sounds } from "../class/utils/Sounds.js";
 
 export function initHome(seoManager) {
 
@@ -10,6 +11,7 @@ export function initHome(seoManager) {
     const homeView = new HomeView();
     const entreprise = new Entreprises();
     const sounds = new Sounds();
+    const maps = new Maps();
 
     const views = Object.freeze({
         homeView: homeView
@@ -24,11 +26,15 @@ export function initHome(seoManager) {
     })
 
     const models = Object.freeze({
+        maps: maps
+    });
+
+    const utils = Object.freeze({
         sounds: sounds
-    })
+    });
 
 
-    const homeCtrl = new HomeCtrl(seoManager, { views, eventBinders, services, models });
+    const homeCtrl = new HomeCtrl(seoManager, { views, eventBinders, services, models, utils });
 
     return homeCtrl;
 

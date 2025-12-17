@@ -154,5 +154,128 @@ export class HomeView {
             `;
         }
     }
+
+    async generateDetailsDepartments(el, dep, departments, emailsSent = "<pas encore d'email envoyés>") {
+        // S'assurer que les départements sont chargés
+
+        el.innerHTML = "";
+
+        // titre
+        const title = document.createElement('h2');
+        title.textContent = `Détails départements: ${departments[dep]}-${dep}`;
+        el.appendChild(title);
+
+        // legend
+        const legend = document.createElement('p');
+        legend.textContent = `Total mails envoyés: ${emailsSent}`;
+        el.appendChild(legend);
+
+        // link to crm
+        if (emailsSent > 0) {
+            const crma = document.createElement('a');
+            crma.setAttribute('data-link', ``);
+            crma.setAttribute('href', `/data?dep=${dep}`)
+            const crmBtn = document.createElement('button');
+            crmBtn.className = "btn btn-data";
+            crmBtn.textContent = "Data";
+            crma.appendChild(crmBtn);
+            el.appendChild(crma);
+        }
+
+
+        // sous titre
+        const subTitle = document.createElement('h3');
+        subTitle.textContent = "Récupération des données";
+        el.appendChild(subTitle);
+
+        // btn submit
+        const btn = document.createElement('button');
+        btn.textContent = "Lancer l'enrichissement du département";
+        btn.className = "btn-enrichissement btn";
+        el.appendChild(btn);
+
+        // ligne d'information
+        const infoDiv = document.createElement('div');
+        infoDiv.className = "details__phraseRassurante";
+        const prSirene = document.createElement('div');
+        prSirene.className = "prSirene apiEl";
+        infoDiv.appendChild(prSirene);
+        const prPappers = document.createElement('div');
+        prPappers.className = "prPappers apiEl";
+        infoDiv.appendChild(prPappers);
+        const prDropContact = document.createElement('div');
+        prDropContact.className = "prDropContact apiEl";
+        infoDiv.appendChild(prDropContact);
+
+        el.appendChild(infoDiv);
+    }
+
+    borderlineTheDepartment(target) {
+        document.querySelectorAll('.selected').forEach((el) => el.classList.remove('selected'));
+        target.classList.add('selected');
+    }
+
+    operationRecolorisation(data) {
+        if (!data) return;
+        const polygons = document.querySelectorAll('polygon');
+        polygons.forEach((polygon) => {
+            const dep = polygon.getAttribute('data-dep');
+            const sameData = data.find((cell) => Number(cell.dep) === Number(dep));
+            if (sameData.length === 0) {
+                polygon.classList.add('polygon-white');
+            }
+        })
+    }
+
+    stopWhitePolygon(dep) {
+        const polygons = document.querySelectorAll('polygon');
+        polygons.forEach((polygon) => {
+            const depPoly = polygon.getAttribute('data-dep');
+
+            if (Number(depPoly) === Number(dep)) {
+                polygon.classList.remove('polygon-white');
+            }
+        })
+    }
+
+
+    renderOperationEnCours(api) {
+        let el = "";
+        // afficher qu'on fetch les données
+        switch (api) {
+            case 'sirene':
+                el = document.querySelector(".prSirene");
+                el.innerHTML = `<i class="fa-solid fa-gear rotating"></i><p>Opération en cours ...</p>`;
+                break;
+
+            case 'pappers':
+                el = document.querySelector(".prPappers");
+                el.innerHTML = `<i class="fa-solid fa-gear rotating"></i><p>Opération en cours ...</p>`;
+                break;
+
+            case 'dropContact':
+                el = document.querySelector(".prDropContact");
+                el.innerHTML = `<i class="fa-solid fa-gear rotating"></i><p>Opération en cours ...</p>`;
+                break;
+
+            default: return;
+        }
+    }
+
+    // renderOperationEnCours() {
+    //     const el = document.querySelector(".details__phraseRassurante");
+    //     if (!el) return;
+
+    //     // afficher qu'on fetch les données
+    //     el.innerHTML = `<i class="fa-solid fa-gear rotating"></i><p>Opération en cours ...</p>`;
+
+    //     // fetch l'api
+    //     const res = await this.controller.entreprise.createSiren(dep);
+    //     console.log(res);
+    //     el.innerHTML = `<i class="fa-solid fa-circle-check"></i><p>SIRENE: ${res.total} entreprises récupérées au total</p>`;
+    //     await this.loadSirenMap();
+    // }
+
+
 }
 
