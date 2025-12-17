@@ -3,6 +3,8 @@ CREATE TABLE entreprises (
 
   siren CHAR(9) NOT NULL,
   denomination VARCHAR(255) NOT NULL,
+  adresse VARCHAR(255),
+  ville varchar(255),
 
   -- Données utiles pour qualifier
   activite_code VARCHAR(10) NULL,
