@@ -142,12 +142,7 @@ export class HomeView {
                     </div>
                     <div class="home__main__details"> 
                         <div class="home__main__details__header">
-                            <select id="filterType" name="filterType">
-                                <option value="siren">SIREN</option>
-                                <option value="dirigeants">Dirigeants</option>
-                                <option value="emails">Emails</option>
-                                 <option value="tous">Tous</option>
-                            </select>
+                           
                     </div>
                         <div class="home__main__details__body"></div>
                     </div>

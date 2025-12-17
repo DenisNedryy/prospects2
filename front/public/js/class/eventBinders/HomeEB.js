@@ -102,8 +102,6 @@ export class HomeEB {
             const container = e.target.closest('.home__main');
 
             if (!container) return;
-            const select = container.querySelector('#filterType');
-            if (!select) return;
             this.controller.sounds.play('dubStep');
             await this.operationSiren(this.dep);
             this.controller.sounds.stop('dubStep');
