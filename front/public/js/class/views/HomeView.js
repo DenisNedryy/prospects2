@@ -262,6 +262,38 @@ export class HomeView {
         }
     }
 
+    renderSiren(api, data) {
+        let el = "";
+        // afficher qu'on fetch les données
+        switch (api) {
+            case 'sirene':
+                el = document.querySelector(".prSirene");
+                el.innerHTML = `<i class="fa-solid fa-circle-check"></i><p>SIRENE: ${data.total} entreprises récupérées au total</p>`;
+                break;
+
+            case 'pappers':
+                el = document.querySelector(".prPappers");
+                el.innerHTML = `<i class="fa-solid fa-circle-check"></i><p>Pappers: ${data.total} dirigeants récupérées au total</p>`;
+                break;
+
+            case 'dropContact':
+                el = document.querySelector(".prDropContact");
+                el.innerHTML = `<i class="fa-solid fa-circle-check"></i><p>Drop-contact: ${data.total} emails récupérées au total</p>`;
+                break;
+
+            default: return;
+        }
+    }
+
+    resetApiRender() {
+        const sirene = document.querySelector(".prSirene");
+        sirene.innerHTML = "";
+        const pappers = document.querySelector(".prPappers");
+        pappers.innerHTML = "";
+        const dropContact = document.querySelector(".prDropContact");
+        dropContact.innerHTML = "";
+    }
+
     // renderOperationEnCours() {
     //     const el = document.querySelector(".details__phraseRassurante");
     //     if (!el) return;

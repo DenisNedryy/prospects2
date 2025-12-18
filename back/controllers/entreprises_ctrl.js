@@ -137,78 +137,47 @@ exports.getSirenDepLength = async (req, res, next) => {
   }
 };
 
-
-exports.getSirenPerDep = async (req, res, next) => {
+exports.createSiren = async (req, res) => {
   try {
-    const dep = req.params.dep;
-    if (!dep) {
-      return res.status(400).json({ error: "Champ 'dep' obligatoire (paramètre d'URL ou query)" });
-    }
-
-    // On récupère par codePostal commençant par le code département
-    const [rows] = await pool.query(
-      `
-      SELECT DISTINCT
-        siren,
-        nom,
-        activite,
-        ville,
-        codePostal,
-        trancheEffectifs,
-        etatEtablissement
-      FROM entreprises
-      WHERE codePostal LIKE CONCAT(?, '%')
-      ORDER BY nom ASC
-      `,
-      [dep]
-    );
-
-    return res.status(200).json({
-      dep,
-      count: rows.length,
-      data: rows,
-    });
-  } catch (err) {
-    console.error('Erreur getSiren :', err);
-    return res.status(500).json({ error: err });
-  }
-};
-
-
-
-exports.createSiren = async (req, res, next) => {
-  try {
-    const dep = req.body.dep;
+    const { dep } = req.body;
     if (!dep) {
       return res.status(400).json({ error: "Champ 'dep' obligatoire" });
     }
 
-    // 1) Récupérer les entreprises depuis Sirene
     const entreprises = await fetchEntreprisesForDepartement(dep);
 
-    // 2) Insert / Update DB
     let inserted = 0;
     let updated = 0;
 
-    for (const p of entreprises) {
+    for (const e of entreprises) {
       const [result] = await pool.query(
         `
-        INSERT INTO entreprises
-          (siret, siren, nom, activite, adresse, codePostal, ville, trancheEffectifs, etatEtablissement)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO entreprises (
+          siren,
+          denomination,
+          adresse,
+          ville,
+          activite_code,
+          tranche_effectif,
+          departement
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE
-          nom = VALUES(nom),
-          activite = VALUES(activite),
+          denomination = VALUES(denomination),
           adresse = VALUES(adresse),
-          codePostal = VALUES(codePostal),
           ville = VALUES(ville),
-          trancheEffectifs = VALUES(trancheEffectifs),
-          etatEtablissement = VALUES(etatEtablissement)
+          activite_code = VALUES(activite_code),
+          tranche_effectif = VALUES(tranche_effectif),
+          departement = VALUES(departement)
         `,
         [
-          p.siret, p.siren, p.nom, p.activite,
-          p.adresse, p.codePostal, p.ville,
-          p.trancheEffectifs, p.etatEtablissement
+          e.siren,
+          e.denomination,
+          e.adresse,
+          e.ville,
+          e.activite_code,
+          e.tranche_effectif,
+          dep
         ]
       );
 
@@ -217,17 +186,72 @@ exports.createSiren = async (req, res, next) => {
     }
 
     return res.status(201).json({
-      msg: "entreprises Sirene importés",
+      message: "Import Sirene terminé",
       total: entreprises.length,
       inserted,
-      updated,
+      updated
     });
 
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: err });
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
+
+
+
+exports.createSiren = async (req, res) => {
+  try {
+    const dep = req.body.dep;
+    if (!dep) return res.status(400).json({ error: "Champ 'dep' obligatoire" });
+
+    // Sirene
+    const entreprises = await fetchEntreprisesForDepartement(dep);
+
+    let inserted = 0;
+    let updated = 0;
+
+    for (const p of entreprises) {
+      const [result] = await pool.query(
+        `
+        INSERT INTO entreprises
+          (siren, denomination, adresse, ville, activite_code, tranche_effectif, departement)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+          denomination      = VALUES(denomination),
+          adresse           = VALUES(adresse),
+          ville             = VALUES(ville),
+          activite_code     = VALUES(activite_code),
+          tranche_effectif  = VALUES(tranche_effectif),
+          departement       = VALUES(departement)
+        `,
+        [
+          p.siren,
+          p.denomination,
+          p.adresse,
+          p.ville,
+          p.activite_code,
+          p.tranche_effectif,
+          dep
+        ]
+      );
+
+      if (result.affectedRows === 1) inserted++;
+      if (result.affectedRows === 2) updated++;
+    }
+
+    return res.status(201).json({
+      msg: "entreprises Sirene importées",
+      total: entreprises.length,
+      inserted,
+      updated,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err.message || err });
+  }
+};
+
 
 exports.createName = (req, res) =>
   res.status(201).json({ msg: "Company name created" });
@@ -317,235 +341,4 @@ exports.getAllEntreprisesData = async (req, res) => {
   }
 };
 
-
-
-exports.getEntreprisesByDep = async (req, res) => {
-  try {
-    const dep = req.params.dep || req.query.dep;
-
-    if (!dep) {
-      return res.status(400).json({ error: "Paramètre 'dep' obligatoire" });
-    }
-
-    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
-    console.log(page);
-    const limit = 20;
-    const offset = (page - 1) * limit;
-
-    // Total (pour totalPages)
-    const [[{ total }]] = await pool.query(
-      `
-      SELECT COUNT(*) AS total
-      FROM entreprises p
-      WHERE p.codePostal LIKE CONCAT(?, '%')
-      `,
-      [dep]
-    );
-
-    // Données paginées + choix déterministe (MIN(id))
-    const [rows] = await pool.query(
-      `
-      SELECT
-        p.id,
-        p.siren,
-        p.nom,
-        SUBSTRING(p.codePostal, 1, 2) AS dep,
-        p.adresse,
-        p.codePostal,
-        p.ville,
-        p.etatEtablissement,
-
-        d.nom_complet AS dirigeant_nom,
-        d.fonction    AS dirigeant_fonction,
-
-        e.email AS email
-
-      FROM entreprises p
-
-      /* 1 dirigeant déterministe: plus petit id (ou remplace par MAX pour le dernier) */
-      LEFT JOIN dirigeants d
-        ON d.id = (
-          SELECT MIN(d2.id)
-          FROM dirigeants d2
-          WHERE d2.entreprise_id = p.id
-        )
-
-      /* 1 email déterministe: plus petit id parmi les valides */
-      LEFT JOIN emails_dirigeants e
-        ON e.id = (
-          SELECT MIN(e2.id)
-          FROM emails_dirigeants e2
-          WHERE e2.dirigeant_id = d.id
-            AND e2.valide = 1
-        )
-
-      WHERE p.codePostal LIKE CONCAT(?, '%')
-
-      ORDER BY p.nom ASC
-      LIMIT ? OFFSET ?
-      `,
-      [dep, limit, offset]
-    );
-
-    const data = rows.map(row => ({
-      siren: row.siren,
-      nom: row.nom,
-      dep: row.dep,
-      adresse: row.adresse,
-      codePostal: row.codePostal,
-      ville: row.ville,
-      etatEtablissement: row.etatEtablissement,
-      dirigeant: row.dirigeant_nom
-        ? { nom_complet: row.dirigeant_nom, fonction: row.dirigeant_fonction }
-        : null,
-      email: row.email || null
-    }));
-
-    res.status(200).json({
-      dep,
-      page,
-      limit,
-      count: data.length,
-      total,
-      totalPages: Math.ceil(total / limit),
-      data
-    });
-  } catch (err) {
-    console.error("Erreur getEntreprisesByDep:", err);
-    res.status(500).json({ error: "Erreur serveur" });
-  }
-};
-
-
-exports.getEntreprisesByQuery = async (req, res) => {
-  try {
-    const query = req.query.query || req.params.query;
-
-    if (!query) {
-      return res.status(400).json({ error: "Paramètre 'query' obligatoire" });
-    }
-
-    const search = `%${query}%`;
-
-    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
-    const limit = 20;
-    const offset = (page - 1) * limit;
-
-    // Total (pour totalPages)
-    const [[{ total }]] = await pool.query(
-      `
-      SELECT COUNT(*) AS total
-      FROM entreprises p
-      WHERE
-        p.nom LIKE ?
-        OR p.siren LIKE ?
-        OR p.ville LIKE ?
-        OR EXISTS (
-          SELECT 1
-          FROM dirigeants d
-          WHERE d.entreprise_id = p.id
-            AND d.nom_complet LIKE ?
-        )
-        OR EXISTS (
-          SELECT 1
-          FROM dirigeants d
-          JOIN emails_dirigeants e ON e.dirigeant_id = d.id
-          WHERE d.entreprise_id = p.id
-            AND e.valide = 1
-            AND e.email LIKE ?
-        )
-      `,
-      [search, search, search, search, search]
-    );
-
-    // Données paginées + choix déterministe
-    const [rows] = await pool.query(
-      `
-      SELECT
-        p.id,
-        p.siren,
-        p.nom,
-        SUBSTRING(p.codePostal, 1, 2) AS dep,
-        p.adresse,
-        p.codePostal,
-        p.ville,
-        p.etatEtablissement,
-
-        d.nom_complet AS dirigeant_nom,
-        d.fonction    AS dirigeant_fonction,
-
-        e.email AS email
-
-      FROM entreprises p
-
-      /* 1 dirigeant déterministe */
-      LEFT JOIN dirigeants d
-        ON d.id = (
-          SELECT MIN(d2.id)
-          FROM dirigeants d2
-          WHERE d2.entreprise_id = p.id
-        )
-
-      /* 1 email déterministe (valide) */
-      LEFT JOIN emails_dirigeants e
-        ON e.id = (
-          SELECT MIN(e2.id)
-          FROM emails_dirigeants e2
-          WHERE e2.dirigeant_id = d.id
-            AND e2.valide = 1
-        )
-
-      WHERE
-        p.nom LIKE ?
-        OR p.siren LIKE ?
-        OR p.ville LIKE ?
-        OR EXISTS (
-          SELECT 1
-          FROM dirigeants d3
-          WHERE d3.entreprise_id = p.id
-            AND d3.nom_complet LIKE ?
-        )
-        OR EXISTS (
-          SELECT 1
-          FROM dirigeants d4
-          JOIN emails_dirigeants e4 ON e4.dirigeant_id = d4.id
-          WHERE d4.entreprise_id = p.id
-            AND e4.valide = 1
-            AND e4.email LIKE ?
-        )
-
-      ORDER BY p.nom ASC
-      LIMIT ? OFFSET ?
-      `,
-      [search, search, search, search, search, limit, offset]
-    );
-
-    const data = rows.map(row => ({
-      siren: row.siren,
-      nom: row.nom,
-      dep: row.dep,
-      adresse: row.adresse,
-      codePostal: row.codePostal,
-      ville: row.ville,
-      etatEtablissement: row.etatEtablissement,
-      dirigeant: row.dirigeant_nom
-        ? { nom_complet: row.dirigeant_nom, fonction: row.dirigeant_fonction }
-        : null,
-      email: row.email || null
-    }));
-
-    res.status(200).json({
-      query,
-      page,
-      limit,
-      count: data.length,
-      total,
-      totalPages: Math.ceil(total / limit),
-      data
-    });
-  } catch (err) {
-    console.error("Erreur getEntreprisesByQuery:", err);
-    res.status(500).json({ error: "Erreur serveur" });
-  }
-};
 

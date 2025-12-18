@@ -11,7 +11,7 @@ CREATE TABLE entreprises (
   tranche_effectif VARCHAR(50) NULL,
   departement VARCHAR(3) NULL,
 
-  -- Résultat final recherché
+  -- Résultat final recherché 
   email VARCHAR(255) NULL,
 
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

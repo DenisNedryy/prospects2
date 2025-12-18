@@ -146,21 +146,28 @@ export class HomeEB {
 
     async operationProspection(dep) {
         console.log("operation prospection en lancé");
+        const data = { total: 25 };
+        this.controller.homeView.resetApiRender();
 
         // récupération des siren
-        await new Promise((resolve) => {
-            this.controller.homeView.renderOperationEnCours("sirene");
-            setTimeout(() => {
-                console.log("siren trouvé");
-                resolve();
-            }, 3000);
-        });
+        this.controller.homeView.renderOperationEnCours("sirene");
+        const sirenes = await this.controller.entreprise.createSiren(dep);
+        console.log(sirenes);
+        this.controller.homeView.renderSiren("sirene", sirenes);
+        // await new Promise(async (resolve) => {
+        //     const sirenes = await this.controller.entreprise.createSiren(dep);
+        //     this.controller.homeView.renderOperationEnCours("sirene");
+        //     setTimeout(() => {
+        //         this.controller.homeView.renderSiren("sirene", sirenes);
+        //         resolve();
+        //     }, 3000);
+        // });
 
         // enrichissement via pappers
         await new Promise((resolve) => {
             this.controller.homeView.renderOperationEnCours("pappers");
             setTimeout(() => {
-                console.log("dirigeants trouvé");
+                this.controller.homeView.renderSiren("pappers", data);
                 resolve();
             }, 3000);
         });
@@ -169,7 +176,7 @@ export class HomeEB {
         await new Promise((resolve) => {
             this.controller.homeView.renderOperationEnCours("dropContact");
             setTimeout(() => {
-                console.log("email trouvé");
+                this.controller.homeView.renderSiren("dropContact", data);
                 resolve();
             }, 3000);
         });
