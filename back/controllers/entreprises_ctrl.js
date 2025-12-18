@@ -138,6 +138,7 @@ exports.getSirenDepLength = async (req, res, next) => {
 };
 
 exports.createSiren = async (req, res) => {
+  console.log("creating siren");
   try {
     const { dep } = req.body;
     if (!dep) {

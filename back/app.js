@@ -23,7 +23,7 @@ app.use("/api/welcome", (req, res, next) => {
 });
 
 app.use("/api/auth", userRoutes);
-app.use('/api/entreprises', entreprisesRoutes);
+// app.use('/api/entreprises', entreprisesRoutes);
 
 app.use("/api/images/avatars", express.static(path.join(__dirname, "uploads/pictures/avatars")));
 
