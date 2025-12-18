@@ -27,6 +27,12 @@ export class HomeView {
                         <li>22 = 100 à 199 salariés</li>
                         <li>31 = 200 à 249 salariés</li>
                     </ul>
+                    <h2>Crédits</h2>
+                    <button class="btn-quota">Quota crédit</button>
+                    <ul>
+                    <li>Pappers crédits: <span class="pappersQuota"></span></li>
+                    <li>DropContact crédits: <span class="dropContactQuota"></span></li>
+                    </ul>
                     </div>
                 </div>
                 <div class="home__main">

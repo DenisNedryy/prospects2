@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const userRoutes = require("./routes/users_routes");
 const entreprisesRoutes = require("./routes/entreprises_routes");
+const enrichmentsRoutes = require('./routes/enrichments_routes');
+const quotasRoutes = require("./routes/quotas_routes");
 const path = require('path');
 
 app.use(cookieParser());
@@ -23,8 +25,9 @@ app.use("/api/welcome", (req, res, next) => {
 });
 
 app.use("/api/auth", userRoutes);
-// app.use('/api/entreprises', entreprisesRoutes);
-
+app.use('/api/entreprises', entreprisesRoutes);
+app.use('/api/enrichments', enrichmentsRoutes);
+app.use('/api/quotas', quotasRoutes);
 app.use("/api/images/avatars", express.static(path.join(__dirname, "uploads/pictures/avatars")));
 
 

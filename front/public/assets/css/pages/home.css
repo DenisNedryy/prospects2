@@ -424,7 +424,7 @@
   border-radius: 50%;
   border: 1px solid #cccbcb;
   margin-right: 15px;
-  font-size:11px;
+  font-size: 11px;
 }
 
 .details__phraseRassurante .fa-circle-check {
@@ -466,4 +466,13 @@
   display: flex;
   align-items: center;
   margin: 8px 0px;
+}
+
+.btn-quota {
+  background-color: rgb(228, 87, 107);
+  border: none;
+  color: white;
+  border-radius: 12px;
+  padding: 12px;
+  cursor:pointer;
 }

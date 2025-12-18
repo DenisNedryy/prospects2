@@ -4,7 +4,9 @@ export class HomeCtrl {
         this.seoManager = seoManager;
         this.homeView = views.homeView;
         this.homeEB = eventBinders.homeEB;
-        this.entreprise = services.entreprise;
+        this.entreprisesService = services.entreprisesService;
+        this.enrichmentsService = services.enrichmentsService;
+        this.quotaService = services.quotaService;
         this.sounds = utils.sounds;
         this.maps = models.maps;
 

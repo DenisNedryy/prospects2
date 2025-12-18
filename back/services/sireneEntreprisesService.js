@@ -25,17 +25,21 @@ function formatEtab(etab) {
   const periode = (etab.periodesEtablissement || [])[0] || {};
 
   return {
-    siret: etab.siret,
     siren: etab.siren,
-    nom: ul.denominationUniteLegale,
-    activite: ul.activitePrincipaleUniteLegale,
-    adresse: `${adr.numeroVoieEtablissement || ""} ${adr.typeVoieEtablissement || ""} ${adr.libelleVoieEtablissement || ""}`.trim(),
-    codePostal: adr.codePostalEtablissement,
-    ville: adr.libelleCommuneEtablissement,
-    trancheEffectifs: ul.trancheEffectifsUniteLegale,
+
+    // aligné table entreprises
+    denomination: ul.denominationUniteLegale || null,
+    activite_code: ul.activitePrincipaleUniteLegale || null,
+    tranche_effectif: ul.trancheEffectifsUniteLegale || null,
+
+    adresse: `${adr.numeroVoieEtablissement || ""} ${adr.typeVoieEtablissement || ""} ${adr.libelleVoieEtablissement || ""}`.trim() || null,
+    ville: adr.libelleCommuneEtablissement || null,
+
+    // utile pour filtrer
     etatEtablissement: periode.etatAdministratifEtablissement,
   };
 }
+
 
 async function fetchEntreprisesForDepartement(departement, maxResults = 1000) {
   const query = buildQuery(departement);

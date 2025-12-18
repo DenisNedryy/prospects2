@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const ctrl_entreprises = require("../controllers/entreprises_ctrl");
+const pappersCtrl = require("../controllers/enrichments/pappers_ctrl");
+const dropcontactCtrl = require("../controllers/enrichments/dropcontact_ctrl");
 const { uploadAvatar } = require("../middlewares/multer-config");
 const auth = require("../middlewares/auth"); 
 const multer = require("multer");
 const upload = multer();
 
-router.post('/siren', ctrl_entreprises.createSiren);
-
-
+router.post('/pappers/run', pappersCtrl.runBatch);
+router.post("/dropcontact/run", dropcontactCtrl.runBatch);
 
 module.exports = router; 
