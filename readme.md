@@ -46,3 +46,8 @@ utilisation de live-server
 . créer une carte intercatives pour prospecter/consulter/crm
 
 
+# mails:
+npm install nodemailer <br>
+25 emails par h (passera sous les radars des filtres anti-spam.)
+
+ 
