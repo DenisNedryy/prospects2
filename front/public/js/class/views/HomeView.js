@@ -6,7 +6,7 @@ export class HomeView {
             el.innerHTML = `
             <div class="home">
                 <div class="home__header">
-                    <div class="home__header__naf homeHeaderBox">
+                    <div class="home__header__naf homeHeaderBox"> 
                         <h2>Activités (naf)</h2>
                         <ul>
                             <li>Sièges sociaux (70.10Z)</li>
@@ -27,10 +27,10 @@ export class HomeView {
                         <li>22 = 100 à 199 salariés</li>
                         <li>31 = 200 à 249 salariés</li>
                     </ul>
-                    <h2>Crédits</h2>
+                    <h2 class="credits">Crédits</h2>
                     <button class="btn-quota">Quota crédit</button>
                     <ul>
-                    <li>Pappers crédits: <span class="pappersQuota"></span></li>
+                    <li>Pappers Crédit:<span class="pappers-jeton-used"></span>/<span class="pappers-jeton-abonnement"></span> </li>
                     <li>DropContact crédits: <span class="dropContactQuota"></span></li>
                     </ul>
                     </div>
@@ -298,6 +298,19 @@ export class HomeView {
         pappers.innerHTML = "";
         const dropContact = document.querySelector(".prDropContact");
         dropContact.innerHTML = "";
+    }
+
+    displayCredits(pappersData,dropContactData){
+        if(pappersData){
+            const jetonUsed = document.querySelector('.pappers-jeton-used');
+            const jetonAbonnement = document.querySelector('.pappers-jeton-abonnement');
+            jetonUsed.textContent = pappersData.jetons_abonnement_utilises;
+            jetonAbonnement.textContent = pappersData.jetons_abonnement
+        }
+        if(dropContactData){
+            const dropContactEl = document.querySelector(".dropContactQuota");
+            dropContactEl.textContent = `${dropContactData.credits_left} crédits`;
+        }
     }
 
     // renderOperationEnCours() {

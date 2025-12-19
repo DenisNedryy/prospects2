@@ -81,11 +81,10 @@ export class HomeEB {
 
     // quotas
     const btnQuota = e.target.closest('.btn-quota');
-    if(btnQuota){
+    if (btnQuota) {
       const pappersPreRes = await this.controller.quotaService.getPappersQuota();
-      console.log(pappersPreRes);
       const dropContactPreRes = await this.controller.quotaService.getDropContactQuota();
-      console.log(dropContactPreRes);
+      this.controller.homeView.displayCredits(pappersPreRes.data, dropContactPreRes.data);
     }
 
     // Click sur un département de la carte
@@ -154,7 +153,7 @@ export class HomeEB {
     this.label.setAttribute("visibility", "hidden");
   }
 
-  async handleChange(e) {}
+  async handleChange(e) { }
 
   async operationProspection(dep) {
     this.controller.homeView.resetApiRender();

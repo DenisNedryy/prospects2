@@ -474,5 +474,10 @@
   color: white;
   border-radius: 12px;
   padding: 12px;
-  cursor:pointer;
+  cursor: pointer;
+  margin: 15px 0px;
+}
+
+html body .credits {
+  margin: 25px 0px 15px 0px;
 }
