@@ -1,45 +1,60 @@
 const nodemailer = require("nodemailer");
 
-// Configuration de ton compte mail (ex: celui de ton hôtel)
 const transporter = nodemailer.createTransport({
-  host: "smtp.ton-hotel.com", // ou smtp.gmail.com
+  host: "smtp-fr.securemail.pro", // Configuration Amen
   port: 465,
-  secure: true, // true pour le port 465
+  secure: true, 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
 
-/**
- * Envoie un mail personnalisé selon le profil de l'entreprise
- */
 async function sendProspectionEmail(target) {
-  // Sélection du modèle de texte selon l'effectif
   let template;
   
+  // On vérifie si l'entreprise est dans le 86 (Vienne) via le code postal
+  const isLocal = target.code_postal && target.code_postal.startsWith("86");
+
   if (target.tranche_effectif === "11") {
-    // Profil idéal pour tes 16 chambres (10-19 pers)
+    // --- Cible PME (10-19 pers) : Focus Exclusivité & Team Building ---
     template = {
-      subject: `Privatisation exclusive pour votre équipe - Hôtel [Nom]`,
-      html: `<p>Bonjour ${target.dirigeant_nom},</p>
-             <p>J'ai vu que <strong>${target.denomination}</strong> est basée dans la région.</p>
-             <p>Notre hôtel propose une offre de <strong>privatisation totale</strong> idéale pour les équipes de votre taille : 
-             16 chambres et une salle de réunion équipée, pour un séminaire en toute confidentialité.</p>`
+      subject: isLocal 
+        ? `Séminaire au vert pour ${target.denomination} - À 15 min de Poitiers`
+        : `Votre prochain séminaire d'équipe au vert (1h30 de Paris)`,
+      html: `
+        <p>Bonjour ${target.dirigeant_nom},</p>
+        <p>Je me permets de vous contacter car le cadre du <strong>Domaine de l'Écorcerie</strong> semble idéal pour les prochaines rencontres de <strong>${target.denomination}</strong>.</p>
+        <p>Situé dans un écrin de 25 hectares de bois, notre domaine offre une déconnexion totale pour vos équipes, tout en restant ultra-accessible (15 min de la Gare TGV de Poitiers).</p>
+        <ul>
+          <li><strong>Privatisation possible :</strong> Un lieu rien que pour vous.</li>
+          <li><strong>Équipements :</strong> Deux salles (70m² et 150m²), Fibre, sono JBL et vidéoprojection.</li>
+          <li><strong>Activités :</strong> Idéal pour vos Team Buildings et moments de cohésion.</li>
+        </ul>
+        <p>${isLocal ? "Étant voisins, je serais ravi de vous faire visiter le domaine." : "N'hésitez pas à me solliciter pour une présentation de nos formules résidentielles."}</p>
+        <p>Bien cordialement,<br>L'équipe du Domaine de l'Écorcerie</p>`
     };
   } else {
-    // Profil pour tes salles de 40 ou 100 (Journée d'étude)
+    // --- Cible Large : Focus Événementiel, Conférence & Réseautage ---
     template = {
-      subject: `Vos prochaines journées d'étude à [Ville]`,
-      html: `<p>Bonjour ${target.dirigeant_nom},</p>
-             <p>Nous disposons de deux salles de séminaire (40 et 100 places) à proximité de vos bureaux.</p>
-             <p>C'est l'endroit idéal pour vos formations ou réunions trimestrielles...</p>`
+      subject: `Lieu d'exception pour vos événements : Domaine de l'Écorcerie`,
+      html: `
+        <p>Bonjour ${target.dirigeant_nom},</p>
+        <p>Le <strong>Domaine de l'Écorcerie</strong>, situé aux portes de Poitiers, accueille vos événements d'entreprise (conférences, cocktails, lancements de produit) dans une bâtisse de 1 000 m² entourée de nature.</p>
+        <p>Pourquoi choisir l'Écorcerie ?</p>
+        <ul>
+          <li><strong>Accessibilité :</strong> 10 min de l'A10 (Paris-Bordeaux) et 15 min de l'aéroport de Biard.</li>
+          <li><strong>Capacité :</strong> Deux salles modulables de 70m² et 150m².</li>
+          <li><strong>Services :</strong> Accès fibre, sonorisation complète et espaces extérieurs pour vos réceptions.</li>
+        </ul>
+        <p>Seriez-vous intéressé par notre brochure pour vos futurs projets d'événements ?</p>
+        <p>Bien cordialement,<br>La Direction - Domaine de l'Écorcerie</p>`
     };
   }
 
   const mailOptions = {
-    from: '"Ton Nom / Hôtel" <commercial@ton-hotel.com>',
-    to: target.email, // L'email trouvé par Dropcontact
+    from: '"Domaine de l’Écorcerie" <commercial@votre-domaine.com>',
+    to: target.email,
     subject: template.subject,
     html: template.html,
   };
